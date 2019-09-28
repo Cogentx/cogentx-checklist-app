@@ -8,6 +8,8 @@
 *.tmp.*
 *.sublime-project
 *.sublime-workspace
+*.png
+*.xml
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
@@ -29,3 +31,7 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+.gradle/
+android/
+ios/
+src/assets/

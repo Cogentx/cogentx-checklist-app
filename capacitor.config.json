@@ -1,0 +1,7 @@
+{
+  "appId": "com.cogentx.checklists",
+  "appName": "checklists",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

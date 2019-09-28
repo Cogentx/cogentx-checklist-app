@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>
+      <img src="assets/images/logo.png" alt="logo">
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addChecklist()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-item-sliding>
+      <ion-item [routerLink]="['/checklist/123']" routerDirection="forward" >
+        <ion-label>{{title}}</ion-label>
+        <span>{{numItems}} items</span>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="light" expandable (click)="renameChecklist(checklist)">
+          <ion-icon slot="end" name="clipboard"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" expandable (click)="removeChecklist(checklist)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
