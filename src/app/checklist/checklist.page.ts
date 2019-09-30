@@ -59,7 +59,7 @@ export class ChecklistPage implements OnInit {
           }
         ]
       })
-      .then((prompt) =>{
+      .then((prompt) => {
         prompt.present();
       });
   }
@@ -76,7 +76,7 @@ export class ChecklistPage implements OnInit {
         message: 'Enter new name:',
         inputs: [
           {
-            type: 'text'
+            type: 'text',
           }
         ],
         buttons: [
@@ -90,6 +90,9 @@ export class ChecklistPage implements OnInit {
             }
           }
         ]
+      })
+      .then((prompt) => {
+        prompt.present();
       });
   }
 
