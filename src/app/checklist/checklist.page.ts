@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, IonList, NavController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AlertController, IonList } from '@ionic/angular';
+import { ChecklistDataService } from '../services/checklist-data.service';
+import { Checklist } from '../interfaces/checklists';
 
 @Component({
   selector: 'app-checklist',
@@ -7,31 +10,93 @@ import { AlertController, IonList, NavController } from '@ionic/angular';
   styleUrls: ['./checklist.page.scss'],
 })
 export class ChecklistPage implements OnInit {
+  @ViewChild(IonList, { static: false }) slidingList: IonList;
 
-  title = 'Checklist 123';
-  item = {
-    checked: false
-  };
+  private slug: string;
+  public checklist: Checklist;
 
-  constructor() { }
+  constructor(
+    private dataService: ChecklistDataService,
+    private alertCtrl: AlertController,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    this.slug = this.route.snapshot.paramMap.get('id');
+    this.loadChecklist();
+  }
+
+  loadChecklist() {
+    if (this.dataService.loaded) {
+      this.checklist = this.dataService.getChecklist(this.slug);
+    } else {
+      this.dataService.load().then(() => {
+        this.checklist = this.dataService.getChecklist(this.slug);
+      });
+    }
   }
 
   addItem() {
-    console.log('addItem');
+    this.alertCtrl
+      .create({
+        header: 'Add Item',
+        message: 'Enter the name of the task for this checklist:',
+        inputs: [
+          {
+            type: 'text',
+            name: 'name'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel'
+          },
+          {
+            text: 'Save',
+            handler: data => {
+              this.dataService.addItem(this.checklist.id, data);
+            }
+          }
+        ]
+      })
+      .then((prompt) =>{
+        prompt.present();
+      });
   }
 
-  toggleItem(item) {
-    console.log('itemToggle', item);
+  toggleItem(item): void {
+    this.dataService.toggleItem(item);
+    // this.checklist.items[item].checked = !item.checked;
   }
 
-  renameItem(item) {
-    console.log('renameItem', item);
+  renameItem(item): void {
+    this.alertCtrl
+      .create({
+        header: 'Rename Item',
+        message: 'Enter new name:',
+        inputs: [
+          {
+            type: 'text'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel'
+          },
+          {
+            text: 'Save',
+            handler: data => {
+              this.dataService.renameItem(item, data);
+            }
+          }
+        ]
+      });
   }
 
-  removeItem(item) {
-    console.log('removeItem', item);
+  removeItem(item): void {
+    this.slidingList.closeSlidingItems()
+      .then(() => {
+        this.dataService.removeItem(this.checklist, item);
+      });
   }
-
 }
