@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { AlertController, IonList, NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { ChecklistDataService } from '../services/checklist-data.service';
 
 @Component({
@@ -8,16 +9,22 @@ import { ChecklistDataService } from '../services/checklist-data.service';
   styleUrls: ['./checklists.page.scss'],
 })
 export class ChecklistsPage implements OnInit {
-  @ViewChild(IonList, { static: false}) slidingList: IonList;
-
-  title = 'TITLE GOES HERE';
-  numItems = 0;
+  @ViewChild(IonList, { static: false }) slidingList: IonList;
 
   constructor(
     public dataService: ChecklistDataService,
-    private alertCtrl: AlertController) { }
+    private alertCtrl: AlertController,
+    private storage: Storage,
+    private navCtrl: NavController
+  ) {}
 
   ngOnInit() {
+    this.storage.get('introShown').then(result => {
+      if (result === null) {
+        this.storage.set('introShown', true);
+        this.navCtrl.navigateRoot('/intro');
+      }
+    });
   }
 
   addChecklist() {
@@ -28,20 +35,20 @@ export class ChecklistsPage implements OnInit {
         inputs: [
           {
             type: 'text',
-            name: 'name'
-          }
+            name: 'name',
+          },
         ],
         buttons: [
           {
-            text: 'Cancel'
+            text: 'Cancel',
           },
           {
             text: 'Save',
             handler: data => {
               this.dataService.createChecklist(data);
-            }
-          }
-        ]
+            },
+          },
+        ],
       })
       .then(prompt => {
         prompt.present();
@@ -56,20 +63,20 @@ export class ChecklistsPage implements OnInit {
         inputs: [
           {
             type: 'text',
-            name: 'name'
-          }
+            name: 'name',
+          },
         ],
         buttons: [
           {
-            text: 'Cancel'
+            text: 'Cancel',
           },
           {
             text: 'Save',
             handler: data => {
               this.dataService.renameChecklist(checklist, data);
-            }
-          }
-        ]
+            },
+          },
+        ],
       })
       .then(prompt => {
         prompt.present();
@@ -77,9 +84,8 @@ export class ChecklistsPage implements OnInit {
   }
 
   removeChecklist(checklist) {
-    this.slidingList.closeSlidingItems()
-      .then(() => {
-        this.dataService.removeChecklist(checklist);
-      });
+    this.slidingList.closeSlidingItems().then(() => {
+      this.dataService.removeChecklist(checklist);
+    });
   }
 }

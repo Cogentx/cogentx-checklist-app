@@ -1,9 +1,35 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>intro</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-slides pager="true">
+    <ion-slide>
+      <img src="assets/images/slide1.png" alt="intro slide 1" />
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/images/slide2.png" alt="intro slide 2" />
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/images/slide3.png" alt="intro slide 3" />
+    </ion-slide>
 
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button
+              color="light"
+              [routerLink]="['/']"
+              routerDirection="forward"
+              style="margin-top: 20px;"
+              >Start Using Checklists
+              <img src="assets/images/slide4.png" alt="intro slide 4">
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <img src="assets/images/slide4.png" alt="final intro slide">
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
